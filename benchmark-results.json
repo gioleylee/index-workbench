@@ -1,0 +1,170 @@
+{
+  "rows": 250000,
+  "lookups_per_workload": 80,
+  "seed": 42,
+  "layouts": {
+    "baseline": {
+      "sqlite": "3.49.1",
+      "file_bytes": 5427200,
+      "ingest_ms": 204.75,
+      "queries": {
+        "hot_tenant": {
+          "p50_us": 12605.55,
+          "p95_us": 13497.99,
+          "plan": [
+            "SCAN events",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "7c714ffd3082cd54d788a80ee3e276bb4a2506493ca3daef29d0e57599e0dadd"
+        },
+        "cold_tenant": {
+          "p50_us": 10824.4,
+          "p95_us": 11456.95,
+          "plan": [
+            "SCAN events",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "d7af6fcba674b9a2b3c7e71e8a61d28aacff9b27e48220f72d61c683de9d2cd0"
+        },
+        "all_tenants": {
+          "p50_us": 16973.65,
+          "p95_us": 18135.64,
+          "plan": [
+            "SCAN events",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "cc87a64f4f67738303138dcd29d28086f1b869d4c99d9cffda432ffa8b4d48de"
+        }
+      }
+    },
+    "tenant": {
+      "sqlite": "3.49.1",
+      "file_bytes": 8290304,
+      "ingest_ms": 426.19,
+      "queries": {
+        "hot_tenant": {
+          "p50_us": 12285.05,
+          "p95_us": 14228.13,
+          "plan": [
+            "SEARCH events USING INDEX event_tenant (tenant=?)",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "7c714ffd3082cd54d788a80ee3e276bb4a2506493ca3daef29d0e57599e0dadd"
+        },
+        "cold_tenant": {
+          "p50_us": 411.9,
+          "p95_us": 493.48,
+          "plan": [
+            "SEARCH events USING INDEX event_tenant (tenant=?)",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "d7af6fcba674b9a2b3c7e71e8a61d28aacff9b27e48220f72d61c683de9d2cd0"
+        },
+        "all_tenants": {
+          "p50_us": 17085.15,
+          "p95_us": 19525.13,
+          "plan": [
+            "SCAN events",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "cc87a64f4f67738303138dcd29d28086f1b869d4c99d9cffda432ffa8b4d48de"
+        }
+      }
+    },
+    "composite": {
+      "sqlite": "3.49.1",
+      "file_bytes": 9945088,
+      "ingest_ms": 528.61,
+      "queries": {
+        "hot_tenant": {
+          "p50_us": 310.15,
+          "p95_us": 576.97,
+          "plan": [
+            "SEARCH events USING INDEX event_tenant_time (tenant=? AND ts>? AND ts<?)"
+          ],
+          "result_sha256": "7c714ffd3082cd54d788a80ee3e276bb4a2506493ca3daef29d0e57599e0dadd"
+        },
+        "cold_tenant": {
+          "p50_us": 291.25,
+          "p95_us": 449.38,
+          "plan": [
+            "SEARCH events USING INDEX event_tenant_time (tenant=? AND ts>? AND ts<?)"
+          ],
+          "result_sha256": "d7af6fcba674b9a2b3c7e71e8a61d28aacff9b27e48220f72d61c683de9d2cd0"
+        },
+        "all_tenants": {
+          "p50_us": 3661.75,
+          "p95_us": 4322.55,
+          "plan": [
+            "SEARCH events USING INDEX event_tenant_time (ANY(tenant) AND ts>? AND ts<?)",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "cc87a64f4f67738303138dcd29d28086f1b869d4c99d9cffda432ffa8b4d48de"
+        }
+      }
+    },
+    "covering": {
+      "sqlite": "3.49.1",
+      "file_bytes": 12591104,
+      "ingest_ms": 501.92,
+      "queries": {
+        "hot_tenant": {
+          "p50_us": 293.05,
+          "p95_us": 360.63,
+          "plan": [
+            "SEARCH events USING COVERING INDEX event_covering (tenant=? AND ts>? AND ts<?)"
+          ],
+          "result_sha256": "7c714ffd3082cd54d788a80ee3e276bb4a2506493ca3daef29d0e57599e0dadd"
+        },
+        "cold_tenant": {
+          "p50_us": 262.6,
+          "p95_us": 312.92,
+          "plan": [
+            "SEARCH events USING COVERING INDEX event_covering (tenant=? AND ts>? AND ts<?)"
+          ],
+          "result_sha256": "d7af6fcba674b9a2b3c7e71e8a61d28aacff9b27e48220f72d61c683de9d2cd0"
+        },
+        "all_tenants": {
+          "p50_us": 3452.5,
+          "p95_us": 5975.93,
+          "plan": [
+            "SEARCH events USING COVERING INDEX event_covering (ANY(tenant) AND ts>? AND ts<?)",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "result_sha256": "cc87a64f4f67738303138dcd29d28086f1b869d4c99d9cffda432ffa8b4d48de"
+        }
+      }
+    },
+    "covering_plus_time": {
+      "sqlite": "3.49.1",
+      "file_bytes": 18481152,
+      "ingest_ms": 733.42,
+      "queries": {
+        "hot_tenant": {
+          "p50_us": 289.6,
+          "p95_us": 552.92,
+          "plan": [
+            "SEARCH events USING COVERING INDEX event_covering (tenant=? AND ts>? AND ts<?)"
+          ],
+          "result_sha256": "7c714ffd3082cd54d788a80ee3e276bb4a2506493ca3daef29d0e57599e0dadd"
+        },
+        "cold_tenant": {
+          "p50_us": 311.5,
+          "p95_us": 452.64,
+          "plan": [
+            "SEARCH events USING COVERING INDEX event_covering (tenant=? AND ts>? AND ts<?)"
+          ],
+          "result_sha256": "d7af6fcba674b9a2b3c7e71e8a61d28aacff9b27e48220f72d61c683de9d2cd0"
+        },
+        "all_tenants": {
+          "p50_us": 322.0,
+          "p95_us": 553.17,
+          "plan": [
+            "SEARCH events USING INDEX event_time (ts>? AND ts<?)"
+          ],
+          "result_sha256": "cc87a64f4f67738303138dcd29d28086f1b869d4c99d9cffda432ffa8b4d48de"
+        }
+      }
+    }
+  }
+}
